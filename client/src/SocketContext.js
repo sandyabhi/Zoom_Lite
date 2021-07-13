@@ -1,14 +1,12 @@
 import { createContext, useRef, useState, useEffect } from "react";
 import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
-import { setMatchers } from "expect/build/jestMatchersObject";
 
 const SocketContext = createContext()
 
-// const socket
 const socket = io('http://localhost:5000')
 
-const ContextProvider = ({ childern }) => {
+const ContextProvider = ({ children}) => {
 
     const [stream, setStream] = useState(null)
     const [me, setMe] = useState('')
@@ -29,7 +27,7 @@ const ContextProvider = ({ childern }) => {
                 myVideo.current.srcObject = currentStream
             })
 
-        socket.on('me', (id) => setMatchers(id))
+        socket.on('me', (id) => setMe(id))
 
         socket.on('callUser', ({ from, name: callerName, signal }) => {
             setCall({ isReceivedCall: true, from, name: callerName, signal })
@@ -99,7 +97,7 @@ const ContextProvider = ({ childern }) => {
             leaveCall,
             answerCall
         }}>
-            {childern}
+            {children}
         </SocketContext.Provider>
     )
 }
